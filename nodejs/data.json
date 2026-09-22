@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Pritam",
+    "age": 22,
+    "role": "student",
+    "skills": [
+      "C++",
+      "JavaScript",
+      "Node.js"
+    ],
+    "isActive": true
+  },
+  {
+    "name": "Rahul",
+    "age": 23,
+    "role": "developer",
+    "skills": [
+      "Python",
+      "React",
+      "MongoDB"
+    ],
+    "isActive": true
+  },
+  {
+    "name": "Ananya",
+    "age": 21,
+    "role": "student",
+    "skills": [
+      "Java",
+      "SQL",
+      "Spring"
+    ],
+    "isActive": false
+  }
+]
