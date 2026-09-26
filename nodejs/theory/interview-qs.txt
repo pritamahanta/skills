@@ -1,0 +1,27 @@
+
+
+1. What is node js? 
+
+Node.js is a JavaScript runtime environment that allows us to execute JavaScript outside the browser, 
+mainly on the server side.
+
+It is built on Chrome's V8 JavaScript engine and provides APIs for things like HTTP servers, 
+file systems, networking, and processes.
+
+Node.js uses a single-threaded event loop with non-blocking I/O, which makes it well suited 
+for applications that handle many concurrent I/O operations, such as APIs, real-time applications, and backend services.
+
+
+
+
+2. Difference between js and nodejs
+
+JavaScript is the programming language. Node.js is a runtime that lets you execute JavaScript outside the browser.
+
+| JavaScript                                                      | Node.js                                                 |
+| --------------------------------------------------------------- | ------------------------------------------------------- |
+| A programming language                                          | A JavaScript runtime environment                        |
+| Can run in environments that provide a JS engine                | Provides an environment to run JS outside the browser   |
+| In browsers, used for UI, DOM manipulation, events, etc.        | Used mainly for backend/server-side applications        |
+| Browser provides APIs like `document`, `window`, `localStorage` | Node provides APIs like `fs`, `http`, `path`, `process` |
+| Uses a JavaScript engine such as V8 in Chrome                   | Uses V8 along with Node.js-specific APIs                |
