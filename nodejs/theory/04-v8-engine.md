@@ -69,7 +69,79 @@ CPU
 
 The purpose of JIT compilation is better execution performance.
 
-## 4. Does V8 Handle Node.js APIs?
+## 4. Interpreted vs. Compiled Code
+
+There are two traditional ways to execute a program.
+
+### Interpreted code
+
+An **interpreter executes code at runtime** instead of first producing a complete native executable.
+
+```text
+Source code
+  ↓
+Interpreter
+  ↓
+Execute
+```
+
+The interpreter reads and executes the program during runtime.
+
+### Compiled code
+
+A **compiler translates source code into machine code before execution**.
+
+```text
+Source code
+  ↓
+Compiler
+  ↓
+Machine code
+  ↓
+CPU executes
+```
+
+A typical C++ workflow looks like this:
+
+```text
+C++ code
+   ↓
+Compiler
+   ↓
+Machine code / executable
+   ↓
+Run executable
+```
+
+### Where does JavaScript fit?
+
+JavaScript is often described as an **interpreted language**, but that description is too simplistic for modern JavaScript engines.
+
+Modern engines such as V8 use a combination of interpretation and JIT compilation:
+
+```text
+JavaScript source
+    ↓
+   V8
+    ↓
+   Interpreter
+    ↓
+   Execute code
+    ↓
+Frequently executed code
+    ↓
+   JIT compilation
+    ↓
+ Optimized machine code
+```
+
+Therefore, JavaScript should not be described as purely interpreted or purely compiled. The engine can execute JavaScript through an interpreter and optimize frequently executed code by compiling it to machine code during runtime.
+
+### Interview answer
+
+> JavaScript engines such as V8 use both interpretation and Just-In-Time compilation. V8 can execute JavaScript through its interpreter and optimize frequently executed code by compiling it to machine code during runtime.
+
+## 5. Does V8 Handle Node.js APIs?
 
 No. This distinction is important.
 
@@ -88,7 +160,7 @@ V8 executes the JavaScript and the calls made from it. However, filesystem funct
 | V8 | Executes JavaScript |
 | Node.js | Provides APIs such as `fs`, `http`, and `process` |
 
-## 5. Does V8 Handle the Event Loop?
+## 6. Does V8 Handle the Event Loop?
 
 No.
 
@@ -101,7 +173,7 @@ The Event Loop is part of Node.js's asynchronous runtime infrastructure, involvi
 
 This distinction is frequently tested in interviews.
 
-## 6. V8 and Memory
+## 7. V8 and Memory
 
 V8 manages the memory needed by JavaScript objects and performs garbage collection.
 
