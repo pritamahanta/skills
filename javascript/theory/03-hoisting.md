@@ -151,7 +151,7 @@ This is why function declarations can be invoked before their textual position i
 
 ## 5. `undefined` vs. `not defined`
 
-This is one of the most important distinctions in the lesson.
+This is one of the most important distinction.
 
 ### `undefined`
 
@@ -202,8 +202,6 @@ not defined
     =
 The identifier does not exist in the relevant environment.
 ```
-
-The lesson demonstrates this distinction using the browser debugger.
 
 ## 6. `undefined` Is a Value
 
