@@ -1,4 +1,13 @@
 let me do some work also guys
 this is the fourth.txt from feature_pritam_2
 
+
 bug is fixed by the main
+
+
+i am fixing this bug
+
+
+let's keep the both, the merge comflict is fully customised. and conflicts can occur even we don't change a same line or stuffs.
+because change is change.
+
