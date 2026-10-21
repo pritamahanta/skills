@@ -33,3 +33,18 @@ element2.fontSize = "30px" ;
 const root = document.getElementById("root") ;
 root.append(element1) ;
 root.append(element2) ;
+
+
+
+// now let's create a function to get rid from this manual repeated tasks
+
+function createElement(tag, att, child) {
+    const element = document.createElement(tag) ;   
+
+    for(key in att) {
+
+        if(key == style)
+        element[key] = att[key]
+    }
+    return element ;
+}

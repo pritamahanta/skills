@@ -1,0 +1,1 @@
+print("namaste","python", sep = "1")
