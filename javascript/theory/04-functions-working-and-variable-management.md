@@ -555,73 +555,8 @@ so it uses `10`.
 
 The broader rules for what happens when a variable is not found locally are covered in later scope and lexical-environment material. Do not mix that topic into this lesson yet.
 
-## 22. Relationship With the Previous Lessons
 
-The concepts now connect.
-
-### Lesson 1
-
-Introduced:
-
-```text
-Execution Context
-├── Memory
-└── Code
-```
-
-and:
-
-```text
-JavaScript
-= Synchronous
-+ Single-threaded
-```
-
-### Lesson 2
-
-Introduced:
-
-```text
-Execution Context
-        ↓
-Call Stack
-```
-
-and explained that function calls create and remove execution contexts.
-
-### Lesson 3
-
-Explained:
-
-```text
-Memory Creation Phase
-        ↓
-Hoisting
-```
-
-### This lesson
-
-Combines these ideas:
-
-```text
-Function invocation
-        ↓
-New execution context
-        ↓
-New local memory
-        ↓
-Own variables
-        ↓
-Push to Call Stack
-        ↓
-Execute
-        ↓
-Pop
-```
-
-This progression is important because the next concepts, especially **scope and closures**, build on this model.
-
-## 23. Browser DevTools Demonstration
+## 22. Browser DevTools Demonstration
 
 The lesson also demonstrates these concepts using the browser debugger.
 
@@ -645,7 +580,7 @@ When `a()` finishes, it disappears from the Call Stack and execution returns to 
 
 This is useful because the diagrams correspond to actual debugger behavior.
 
-## 24. Common Confusion
+## 23. Common Confusion
 
 ### “There are three `x` variables. Doesn't JavaScript overwrite them?”
 
@@ -681,7 +616,7 @@ Global x → 1
 
 The local variables belonged to their respective function execution contexts.
 
-## 25. Interview Questions
+## 24. Interview Questions
 
 ### What happens when a function is called in JavaScript?
 
@@ -749,7 +684,7 @@ Local memory is the memory associated with the current function's execution cont
 
 In the terminology used in this series, it refers to the memory component where variables and functions associated with an execution context are stored.
 
-## 26. The One Diagram to Remember
+## 25. The One Diagram to Remember
 
 ```text
                   CALL STACK
@@ -780,7 +715,7 @@ b() EC
 
 Only one function execution context is at the top of the Call Stack at a time. When that function completes, it is popped and control returns to the previous context.
 
-## 27. What You Should Remember
+## 26. What You Should Remember
 
 ```text
 1. Program starts
