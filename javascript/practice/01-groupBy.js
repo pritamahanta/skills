@@ -1,4 +1,5 @@
-// Write a function that accepts an array and a callback, then groups each element under the key returned by that callback.
+// Write a function that accepts an array and a callback, then groups each element under the
+//  key returned by that callback.
 
 const users = [
   { name: "A", role: "admin" },
