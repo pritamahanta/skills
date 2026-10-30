@@ -2,3 +2,20 @@
 // - When called repeatedly, it resets the timer.
 // - fn executes only after delay milliseconds have passed without another call.
 // - It should pass the latest call's arguments to fn.
+
+
+
+const debounce = function(fn, del) {
+    let timer;
+
+    return function(...args) {
+
+        const context = this;
+
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            fn.apply(context, args);
+        }, del);
+    };
+};
