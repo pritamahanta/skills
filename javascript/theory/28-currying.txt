@@ -1,0 +1,648 @@
+ 
+# JavaScript: Currying
+
+## 1. What is Currying?
+
+**Currying is a technique of transforming a function that takes multiple arguments into a sequence of functions, where each function takes one argument at a time.**
+
+For example, consider a function that takes three arguments:
+
+```javascript
+function sum(a, b, c) {
+    return a + b + c;
+}
+
+console.log(sum(2, 3, 4));
+```
+
+**Output:**
+```text
+9
+```
+
+Using currying, we can transform this into:
+
+```javascript
+function sum(a) {
+    return function (b) {
+        return function (c) {
+            return a + b + c;
+        };
+    };
+}
+
+console.log(sum(2)(3)(4));
+```
+
+**Output:**
+```text
+9
+```
+
+Notice the difference:
+
+```javascript
+// Normal function call
+sum(2, 3, 4);
+
+// Curried function call
+sum(2)(3)(4);
+```
+
+In the curried version:
+
+1. `sum(2)` returns another function.
+2. That function receives `3` and returns another function.
+3. The final function receives `4` and calculates the result.
+
+Each function remembers the arguments received in earlier calls.
+
+---
+
+## 2. Why does Currying work? Understanding Closures
+
+Closures are an important concept behind currying.
+
+A closure allows an inner function to access variables from its outer function, even after the outer function has finished executing.
+
+Consider:
+
+```javascript
+function outer(a) {
+    return function inner(b) {
+        return a + b;
+    };
+}
+
+const addFive = outer(5);
+
+console.log(addFive(10));
+```
+
+**Output:**
+```text
+15
+```
+
+What happened?
+
+```javascript
+const addFive = outer(5);
+```
+
+- `outer(5)` executes with `a = 5`.
+- It returns the `inner` function.
+- The returned function retains access to `a`, whose value is `5`.
+
+Later:
+
+```javascript
+addFive(10);
+```
+
+The inner function receives `b = 10` and calculates `5 + 10`.
+
+This same principle allows curried functions to remember arguments from previous calls.
+
+---
+
+## 3. Implementing Currying Manually
+
+Let's understand currying through a few examples.
+
+### Example 1: Addition
+
+```javascript
+function add(a) {
+    return function (b) {
+        return a + b;
+    };
+}
+
+const addFive = add(5);
+
+console.log(addFive(10));
+console.log(addFive(20));
+```
+
+**Output:**
+```text
+15
+25
+```
+
+Here, `add(5)` creates a function that remembers `a = 5`.
+
+We can reuse that returned function with different values.
+
+### Example 2: Multiplication with three arguments
+
+```javascript
+function multiply(a) {
+    return function (b) {
+        return function (c) {
+            return a * b * c;
+        };
+    };
+}
+
+console.log(multiply(2)(3)(4));
+```
+
+**Output:**
+```text
+24
+```
+
+The first function remembers `a`, the second remembers `b`, and the third receives `c` and calculates the result.
+
+### Example 3: Using Arrow Functions
+
+The same logic can be written more concisely using arrow functions:
+
+```javascript
+const multiply = a => b => c => a * b * c;
+
+console.log(multiply(2)(3)(4));
+```
+
+**Output:**
+```text
+24
+```
+
+The arrow-function syntax is simply a shorter way of returning nested functions.
+
+---
+
+## 4. Creating a Generic Curry Function
+
+So far, we have manually converted individual functions into curried functions.
+
+But what if we want a reusable utility that can curry different functions automatically?
+
+We can create a generic `curry()` function.
+
+### Implementation
+
+```javascript
+function curry(fn) {
+    return function curried(...args) {
+
+        if (args.length >= fn.length) {
+            return fn(...args);
+        }
+
+        return function (...nextArgs) {
+            return curried(...args, ...nextArgs);
+        };
+    };
+}
+```
+
+Let's understand how it works.
+
+### A. Accepting the original function
+
+```javascript
+function curry(fn)
+```
+
+`fn` is the original function that we want to transform into a curried function.
+
+### B. Collecting arguments
+
+```javascript
+return function curried(...args)
+```
+
+The returned function collects all the arguments passed during the current invocation.
+
+For example:
+
+```javascript
+curried(2);
+```
+
+Here, `args` contains:
+
+```javascript
+[2]
+```
+
+### C. Checking the number of arguments
+
+```javascript
+if (args.length >= fn.length) {
+    return fn(...args);
+}
+```
+
+`fn.length` gives the number of formal parameters in the original function, subject to JavaScript's parameter-counting rules.
+
+For example:
+
+```javascript
+function sum(a, b, c) {
+    return a + b + c;
+}
+
+console.log(sum.length);
+```
+
+**Output:**
+```text
+3
+```
+
+When we have collected at least three arguments, the original function is executed.
+
+### D. Returning another function
+
+```javascript
+return function (...nextArgs) {
+    return curried(...args, ...nextArgs);
+};
+```
+
+When we have not collected enough arguments, another function is returned.
+
+That function collects the next arguments and combines them with the previously collected arguments.
+
+This process continues until the required number of arguments is reached.
+
+### Testing the generic curry function
+
+```javascript
+function curry(fn) {
+    return function curried(...args) {
+
+        if (args.length >= fn.length) {
+            return fn(...args);
+        }
+
+        return function (...nextArgs) {
+            return curried(...args, ...nextArgs);
+        };
+    };
+}
+
+function sum(a, b, c) {
+    return a + b + c;
+}
+
+const curriedSum = curry(sum);
+
+console.log(curriedSum(2)(3)(4));
+console.log(curriedSum(2, 3)(4));
+console.log(curriedSum(2)(3, 4));
+```
+
+**Output:**
+```text
+9
+9
+9
+```
+
+This implementation supports passing arguments one at a time or grouping multiple arguments across calls.
+
+---
+
+## 5. Practical Use Cases of Currying
+
+### A. Creating reusable functions
+
+Suppose we have a function that applies a discount to a price.
+
+```javascript
+function applyDiscount(discount, price) {
+    return price - (price * discount / 100);
+}
+```
+
+We can curry it:
+
+```javascript
+function applyDiscount(discount) {
+    return function (price) {
+        return price - (price * discount / 100);
+    };
+}
+```
+
+Now we can create reusable discount functions:
+
+```javascript
+const discount10 = applyDiscount(10);
+const discount20 = applyDiscount(20);
+
+console.log(discount10(1000));
+console.log(discount20(1000));
+```
+
+**Output:**
+```text
+900
+800
+```
+
+Instead of passing the same discount percentage repeatedly, we create a function that remembers the discount.
+
+### B. Creating configurable functions
+
+Suppose an application needs to create messages with different prefixes.
+
+```javascript
+const createMessage = prefix => message => {
+    return `${prefix}: ${message}`;
+};
+
+const errorMessage = createMessage("ERROR");
+const successMessage = createMessage("SUCCESS");
+
+console.log(errorMessage("Something went wrong"));
+console.log(successMessage("Data saved successfully"));
+```
+
+**Output:**
+```text
+ERROR: Something went wrong
+SUCCESS: Data saved successfully
+```
+
+Each returned function remembers its own prefix.
+
+### C. Reusing API configuration
+
+Suppose we want to create functions that use a particular API base URL.
+
+```javascript
+const createApiUrl = baseUrl => endpoint => {
+    return `${baseUrl}/${endpoint}`;
+};
+
+const productionApi = createApiUrl("https://api.example.com");
+const stagingApi = createApiUrl("https://staging.example.com");
+
+console.log(productionApi("users"));
+console.log(stagingApi("users"));
+```
+
+**Output:**
+```text
+https://api.example.com/users
+https://staging.example.com/users
+```
+
+The base URL is supplied once, and the returned function can be reused for different endpoints.
+
+---
+
+## 6. Currying vs Partial Application
+
+These two concepts are related, but they are not the same.
+
+### Currying
+
+Currying transforms a function that accepts multiple arguments into nested functions that accept arguments incrementally.
+
+```javascript
+function multiply(a) {
+    return function (b) {
+        return function (c) {
+            return a * b * c;
+        };
+    };
+}
+
+multiply(2)(3)(4);
+```
+
+### Partial Application
+
+Partial application means fixing some arguments of a function and returning a new function that accepts the remaining arguments.
+
+```javascript
+function multiply(a, b, c) {
+    return a * b * c;
+}
+
+const multiplyByTwo = (b, c) => multiply(2, b, c);
+
+console.log(multiplyByTwo(3, 4));
+```
+
+**Output:**
+```text
+24
+```
+
+### Main difference
+
+| Feature | Currying | Partial Application |
+|---|---|---|
+| Meaning | Converts a multi-argument function into nested functions | Fixes some arguments and returns a new function |
+| Argument handling | Usually one argument per function call | Can fix one or multiple arguments |
+| Function structure | Produces a sequence of functions | Does not require nested functions |
+| Example | `sum(2)(3)(4)` | `multiplyByTwo(3, 4)` |
+
+Currying can make partial application easier, but the two techniques describe different things.
+
+---
+
+## 7. Important Concepts and Common Mistakes
+
+### A. Currying does not mean calling a function multiple times
+
+Consider:
+
+```javascript
+sum(2)(3)(4);
+```
+
+This is not three independent calls to the original `sum` function.
+
+The first calls return functions. The final call executes the calculation.
+
+### B. JavaScript does not automatically curry functions
+
+JavaScript does not automatically transform a normal function into a curried function.
+
+We must implement the nested functions manually or use a curry utility.
+
+### C. Understanding fn.length limitations
+
+Our generic curry implementation uses:
+
+```javascript
+fn.length
+```
+
+However, this property has some limitations.
+
+For example:
+
+```javascript
+function greet(name, message = "Hello") {
+    return `${message}, ${name}`;
+}
+
+console.log(greet.length);
+```
+
+**Output:**
+```text
+1
+```
+
+Parameters after the first default parameter are not included in `function.length`.
+
+Rest parameters are also excluded.
+
+Therefore, when a function uses default or rest parameters, relying only on `fn.length` may not provide the intended number of arguments.
+
+In such cases, we can pass the expected arity explicitly to our curry utility.
+
+---
+
+## 8. Interview Practice Questions
+
+### Question 1: What is the output?
+
+```javascript
+function add(a) {
+    return function (b) {
+        return a + b;
+    };
+}
+
+console.log(add(10)(20));
+```
+
+**Output:**
+```text
+30
+```
+
+### Question 2: What is the output?
+
+```javascript
+const multiply = a => b => c => a * b * c;
+
+console.log(multiply(2)(5)(3));
+```
+
+**Output:**
+```text
+30
+```
+
+### Question 3: What is the output?
+
+```javascript
+function calculate(a) {
+    return function (b) {
+        return function (c) {
+            return a + b + c;
+        };
+    };
+}
+
+const result = calculate(1)(2);
+
+console.log(result(3));
+```
+
+**Output:**
+```text
+6
+```
+
+`calculate(1)(2)` returns a function that still needs the third argument.
+
+### Question 4: Implement a curried subtraction function
+
+Expected usage:
+
+```javascript
+subtract(20)(5);
+```
+
+Expected output:
+
+```text
+15
+```
+
+**Solution:**
+
+```javascript
+function subtract(a) {
+    return function (b) {
+        return a - b;
+    };
+}
+```
+
+### Question 5: Implement a generic curry function
+
+Given:
+
+```javascript
+function volume(length, width, height) {
+    return length * width * height;
+}
+```
+
+Expected usage:
+
+```javascript
+const curriedVolume = curry(volume);
+
+console.log(curriedVolume(2)(3)(4));
+```
+
+Expected output:
+
+```text
+24
+```
+
+Use the generic `curry()` implementation from Section 4.
+
+---
+
+## 9. Final Reference
+
+The basic pattern of currying:
+
+```javascript
+function original(a, b, c) {
+    return a + b + c;
+}
+```
+
+Becomes:
+
+```javascript
+function curried(a) {
+    return function (b) {
+        return function (c) {
+            return a + b + c;
+        };
+    };
+}
+```
+
+Usage:
+
+```javascript
+curried(1)(2)(3);
+```
+
+### Further reading
+
+- [MDN: Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)
+- [MDN: Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions)
+- [JavaScript.info: Currying and partial application](https://javascript.info/currying-partials)
