@@ -16,7 +16,7 @@ employee_info = {
     "age": "23",
     "weight": 78.0,
     'courses': ["Physics", "Math", "Chemistry"],
-    "Contacts": {"Phone": "123452", "Email": "alwkejnt@gmail.com"}
+    "contacts": {"Phone": "123452", "Email": "alwkejnt@gmail.com"}
 }
 
 employee1 = employee(**employee_info)
